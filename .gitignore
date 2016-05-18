@@ -1,0 +1,27 @@
+### Java ###
+*.class
+
+# Package Files #
+*.jar
+*.war
+*.ear
+
+# User-specific stuff:
+
+*.iml
+.idea/
+.idea/tasks.xml
+.idea/dictionaries
+.idea/jsLibraryMappings.xml
+
+# Sensitive or high-churn files:
+.idea/dataSources.ids
+.idea/dataSources.xml
+.idea/dataSources.local.xml
+.idea/sqlDataSources.xml
+.idea/dynamic.xml
+
+logs/
+
+# IntelliJ
+/out/
