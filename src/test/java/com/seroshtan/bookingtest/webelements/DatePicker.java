@@ -1,5 +1,6 @@
 package com.seroshtan.bookingtest.webelements;
 
+import com.seroshtan.bookingtest.webelements.impl.DatePickerImpl;
 import net.serenitybdd.core.annotations.ImplementedBy;
 import net.serenitybdd.core.pages.WebElementFacade;
 
@@ -12,6 +13,7 @@ import java.time.LocalDate;
  */
 @ImplementedBy(DatePickerImpl.class)
 public interface DatePicker extends WebElementFacade {
+
     /**
      * Select required date from datepicker.
      *

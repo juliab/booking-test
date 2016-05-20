@@ -1,6 +1,5 @@
 package com.seroshtan.bookingtest;
 
-import com.seroshtan.bookingtest.beans.Hotel;
 import com.seroshtan.bookingtest.pages.MainPage;
 import com.seroshtan.bookingtest.pages.SearchResultsPage;
 import net.serenitybdd.junit.runners.SerenityRunner;
@@ -16,7 +15,9 @@ import java.util.List;
 import static org.junit.Assert.assertTrue;
 
 /**
- * Test class for booking.com hotel search.
+ * Test class for hotel search.
+ *
+ * @author Julia Siroshtan
  */
 @RunWith(SerenityRunner.class)
 public class SearchTest {
@@ -32,12 +33,13 @@ public class SearchTest {
     private SearchResultsPage resultsPage;
 
     @Test
-    public void foundHotelsShouldBeInPlaceProvidedInSearch() {
+    public void searchFromTheMainPage() {
         mainPage.open();
         mainPage.searchFor(SEARCH_PLACE, FROM_DATE, TO_DATE);
-        List<Hotel> hotels = resultsPage.readHotels();
-        hotels.stream().forEach(hotel ->
-                assertTrue("Hotel " + hotel.getName() + " isn't located in " + SEARCH_PLACE,
-                        hotel.getLocation().contains(SEARCH_PLACE)));
+        List<String> locations = resultsPage.readHotelLocations();
+        System.out.println("Number of hotels: " + locations.size());
+        locations.stream().forEach(location ->
+                assertTrue("Hotel isn't located in " + SEARCH_PLACE,
+                        location.contains(SEARCH_PLACE)));
     }
 }
