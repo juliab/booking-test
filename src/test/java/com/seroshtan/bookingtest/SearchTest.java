@@ -37,7 +37,6 @@ public class SearchTest {
         mainPage.open();
         mainPage.searchFor(SEARCH_PLACE, FROM_DATE, TO_DATE);
         List<String> locations = resultsPage.readHotelLocations();
-        System.out.println("Number of hotels: " + locations.size());
         locations.stream().forEach(location ->
                 assertTrue("Hotel isn't located in " + SEARCH_PLACE,
                         location.contains(SEARCH_PLACE)));
