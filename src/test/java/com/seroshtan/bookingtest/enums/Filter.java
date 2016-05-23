@@ -1,4 +1,4 @@
-package com.seroshtan.bookingtest.beans;
+package com.seroshtan.bookingtest.enums;
 
 import org.openqa.selenium.By;
 

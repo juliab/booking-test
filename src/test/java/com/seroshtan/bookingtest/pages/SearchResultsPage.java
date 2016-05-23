@@ -1,6 +1,6 @@
 package com.seroshtan.bookingtest.pages;
 
-import com.seroshtan.bookingtest.beans.Filter;
+import com.seroshtan.bookingtest.enums.Filter;
 import com.seroshtan.bookingtest.webelements.SearchForm;
 import net.serenitybdd.core.pages.PageObject;
 import net.serenitybdd.core.pages.WebElementFacade;
