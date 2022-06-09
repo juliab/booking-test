@@ -2,6 +2,7 @@ package com.seroshtan.bookingtest;
 
 import com.seroshtan.bookingtest.pages.MainPage;
 import com.seroshtan.bookingtest.pages.SearchResultsPage;
+import com.seroshtan.bookingtest.test_data.TestData;
 import net.serenitybdd.junit.runners.SerenityRunner;
 import net.thucydides.core.annotations.Managed;
 import org.junit.Before;
@@ -20,7 +21,6 @@ import static org.junit.Assert.assertTrue;
  */
 @RunWith(SerenityRunner.class)
 public class SortTest {
-    private static final String SEARCH_PLACE = "Paris";
 
     @Managed
     WebDriver driver;
@@ -31,7 +31,7 @@ public class SortTest {
     @Before
     public void goToResultsPage() {
         mainPage.open();
-        mainPage.searchFor(SEARCH_PLACE);
+        mainPage.searchFor(TestData.CITY_PARIS, TestData.FROM_DATE, TestData.TO_DATE);
     }
 
     @Test

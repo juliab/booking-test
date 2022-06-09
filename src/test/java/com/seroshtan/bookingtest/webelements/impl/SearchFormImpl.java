@@ -14,16 +14,22 @@ import java.time.LocalDate;
 public class SearchFormImpl extends WidgetObjectImpl implements SearchForm {
 
     private final static String PLACE_INPUT_ID = "ss";
-    private final static String AUTO_COMPLETE_FIRST_CSS = ".c-autocomplete__list li:first-child";
-    private final static String DATE_FROM_XPATH = ".//*[@data-mode='check-in']";
-    private final static String DATE_TO_XPATH = ".//*[@data-mode='check-out']";
-    private final static String SEARCH_BUTTON_XPATH = ".//button[@type='submit'][*[text() = 'Search']]";
+    private final static String AUTO_COMPLETE_FIRST_XPATH = ".//li[@data-i='0']";
+    private final static String DATES_XPATH = ".//*[@class='xp__dates xp__group']";
+
+    private final static String DATE_FROM_XPATH = ".//*[@data-bui-ref='calendar-month'][1]";
+
+    private final static String DATE_TO_XPATH = ".//*[@data-bui-ref='calendar-month'][2]";
+    private final static String SEARCH_BUTTON_XPATH = ".//button[@data-sb-id='main']";
 
     @FindBy(id = PLACE_INPUT_ID)
     private WebElementFacade placeInput;
 
-    @FindBy(css = AUTO_COMPLETE_FIRST_CSS)
+    @FindBy(xpath = AUTO_COMPLETE_FIRST_XPATH)
     private WebElementFacade autoCompleteFirst;
+
+    @FindBy(xpath = DATES_XPATH)
+    private WebElementFacade datesButton;
 
     @FindBy(xpath = DATE_FROM_XPATH)
     private DatePicker dateFrom;
@@ -41,21 +47,26 @@ public class SearchFormImpl extends WidgetObjectImpl implements SearchForm {
     @Override
     public void searchFor(String place, LocalDate checkIn, LocalDate checkOut) {
         enterPlace(place);
-        if (checkIn != null) {
-            selectFromDate(checkIn);
-        }
-        if (checkOut != null) {
-            selectToDate(checkOut);
-        }
+        callCalendar();
+        selectFromDate(checkIn);
+        selectToDate(checkOut);
         search();
     }
 
     private void enterPlace(String place) {
+        placeInput.waitUntilEnabled();
         placeInput.clear();
         placeInput.sendKeys(place);
-        autoCompleteFirst.waitUntilVisible();
+        autoCompleteFirst.waitUntilClickable();
         autoCompleteFirst.click();
         autoCompleteFirst.waitUntilNotVisible();
+    }
+
+    private void callCalendar() {
+        if (!dateFrom.isVisible()) {
+            datesButton.click();
+        }
+        dateFrom.waitUntilVisible();
     }
 
     private void selectFromDate(LocalDate date) {

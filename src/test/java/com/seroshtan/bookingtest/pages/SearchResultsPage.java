@@ -11,8 +11,6 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.seroshtan.bookingtest.util.StringUtil.intFromString;
-
 /**
  * This class represents search results page on booking.com web-site.
  *
@@ -20,26 +18,27 @@ import static com.seroshtan.bookingtest.util.StringUtil.intFromString;
  */
 public class SearchResultsPage extends PageObject {
 
-    private final static String HOTEL_LIST_ID = "hotellist_inner";
-    private final static String OVERLAY_MSG_CSS = "div.overlay_msg";
-    private final static By HOTEL_LOCATOR = By.xpath("./div[@data-hotelid]");
+    private final static String HOTEL_LIST_XPATH = "//div[@data-component='arp-properties-list']";
+    private final static String OVERLAY_MSG_XPATH = ".//div[@data-testid='overlay-card']";
+    private final static By HOTEL_LOCATOR = By.xpath(".//div[@data-testid='property-card']");
     private final static By HOTEL_NAME_LOCATOR = By.xpath(".//*[@class='sr-hotel__name']");
-    private final static By HOTEL_LOCATION_LOCATOR = By.xpath(".//*[@class='address']/a");
-    private final static By HOTEL_RATING_LOCATOR = By.xpath(".//*[contains(@class, 'stars ratings_stars')]");
-    private final static String SORT_BY_STARS_CSS = "li.sort_stars";
-    private final static By STARS_FROM_5_TO_1_LOCATOR = By.linkText("stars [5 to 1]");
+    private final static By HOTEL_LOCATION_LOCATOR = By.xpath(".//*[@data-testid='location']");
+    private final static By HOTEL_RATING_LOCATOR = By.xpath(".//div[@data-testid='rating-stars']/* | .//div[@data-testid='rating-squares']/*");
+    private final static String SORT_BAR_DROPDOWN_XPATH = "//ul[@role='menubar']/li[@data-id='dropdown']/a";
+    private final static By SORT_DROPDOWN_LIST_XPATH = By.xpath("./following-sibling::ul");
+    private final static By SORT_BY_STARS_HIGHEST_FIRST_LOCATOR = By.xpath("./li[@data-id='class']");
 
-    @FindBy(id = HOTEL_LIST_ID)
+    @FindBy(xpath = HOTEL_LIST_XPATH)
     private WebElementFacade hotelList;
 
     @FindBy(id = SearchForm.ID)
     private SearchForm searchForm;
 
-    @FindBy(css = OVERLAY_MSG_CSS)
+    @FindBy(xpath = OVERLAY_MSG_XPATH)
     private WebElementFacade overlayMsg;
 
-    @FindBy(css = SORT_BY_STARS_CSS)
-    private WebElementFacade sortByStars;
+    @FindBy(xpath = SORT_BAR_DROPDOWN_XPATH)
+    private WebElementFacade sortBarDropdown;
 
     /**
      * Read locations of found hotels into a list.
@@ -49,7 +48,7 @@ public class SearchResultsPage extends PageObject {
     public List<String> readHotelLocations() {
         List<String> result = new ArrayList<>();
         List<WebElementFacade> hotels = hotelList.thenFindAll(HOTEL_LOCATOR);
-        hotels.stream().forEach(hotel -> {
+        hotels.forEach(hotel -> {
             String location = hotel.then(HOTEL_LOCATION_LOCATOR).getText();
             result.add(location);
         });
@@ -64,9 +63,9 @@ public class SearchResultsPage extends PageObject {
     public List<Integer> readHotelRatings() {
         List<Integer> result = new ArrayList<>();
         List<WebElementFacade> hotels = hotelList.thenFindAll(HOTEL_LOCATOR);
-        hotels.stream().forEach(hotel -> {
-            String location = hotel.then(HOTEL_RATING_LOCATOR).getText();
-            result.add(intFromString(location));
+        hotels.forEach(hotel -> {
+            List<WebElementFacade> stars = hotel.thenFindAll(HOTEL_RATING_LOCATOR);
+            result.add(stars.size());
         });
         return result;
     }
@@ -99,8 +98,10 @@ public class SearchResultsPage extends PageObject {
      * Set sorting by hotel rating.
      */
     public void sortHotelsByRating() {
-        sortByStars.click();
-        sortByStars.then(STARS_FROM_5_TO_1_LOCATOR).click();
+        sortBarDropdown.click();
+        WebElementFacade sortDropdown = sortBarDropdown.then(SORT_DROPDOWN_LIST_XPATH);
+        sortDropdown.waitUntilVisible();
+        sortDropdown.then(SORT_BY_STARS_HIGHEST_FIRST_LOCATOR).click();
         overlayMsg.waitUntilVisible();
         overlayMsg.waitUntilNotVisible();
     }

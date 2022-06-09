@@ -2,6 +2,7 @@ package com.seroshtan.bookingtest;
 
 import com.seroshtan.bookingtest.pages.MainPage;
 import com.seroshtan.bookingtest.pages.SearchResultsPage;
+import com.seroshtan.bookingtest.test_data.TestData;
 import net.serenitybdd.junit.runners.SerenityRunner;
 import net.thucydides.core.annotations.Managed;
 import org.junit.Before;
@@ -12,7 +13,6 @@ import org.openqa.selenium.WebDriver;
 import java.util.List;
 
 import static org.junit.Assert.assertEquals;
-import static com.seroshtan.bookingtest.enums.Filter.*;
 
 /**
  * Test class for hotels filtering on the results page.
@@ -21,9 +21,6 @@ import static com.seroshtan.bookingtest.enums.Filter.*;
  */
 @RunWith(SerenityRunner.class)
 public class FilterTest {
-
-    private static final String SEARCH_PLACE = "Paris";
-    private static final Rating TEST_RATING = Rating.THREE_STARS;
 
     @Managed
     WebDriver driver;
@@ -34,15 +31,15 @@ public class FilterTest {
     @Before
     public void goToResultsPage() {
         mainPage.open();
-        mainPage.searchFor(SEARCH_PLACE);
+        mainPage.searchFor(TestData.CITY_PARIS, TestData.FROM_DATE, TestData.TO_DATE);
     }
 
     @Test
     public void filterByRating() {
-        resultsPage.filterHotelsBy(TEST_RATING);
+        resultsPage.filterHotelsBy(TestData.TEST_RATING);
         List<Integer> hotelRatings = resultsPage.readHotelRatings();
-        hotelRatings.stream().forEach(rating ->
+        hotelRatings.forEach(rating ->
                 assertEquals("Filter by hotel rating didn't work",
-                        rating, TEST_RATING.getNumberOfStars()));
+                        rating, TestData.TEST_RATING.getNumberOfStars()));
     }
 }

@@ -21,14 +21,14 @@ public class Filter {
             this.numberOfStars = numberOfStars;
         }
 
-        private int numberOfStars;
+        private final int numberOfStars;
 
         public Integer getNumberOfStars() {
             return numberOfStars;
         }
 
         public By getLocator() {
-            return By.xpath("//*[@id='filter_class']//a[@data-value='" + ordinal() + "']");
+            return By.xpath(".//*[@data-filters-item='class:class=" + ordinal() + "']");
         }
     }
 }

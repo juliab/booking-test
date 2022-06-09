@@ -2,6 +2,7 @@ package com.seroshtan.bookingtest;
 
 import com.seroshtan.bookingtest.pages.MainPage;
 import com.seroshtan.bookingtest.pages.SearchResultsPage;
+import com.seroshtan.bookingtest.test_data.TestData;
 import net.serenitybdd.junit.runners.SerenityRunner;
 import net.thucydides.core.annotations.Managed;
 import org.junit.Test;
@@ -22,9 +23,7 @@ import static org.junit.Assert.assertTrue;
 @RunWith(SerenityRunner.class)
 public class SearchTest {
 
-    private static final String SEARCH_PLACE = "New York City";
-    private static final LocalDate FROM_DATE = LocalDate.of(2016, Month.JUNE, 1);
-    private static final LocalDate TO_DATE = LocalDate.of(2016, Month.JUNE, 5);
+    private static final String TEST_CITY = TestData.CITY_NYC;
 
     @Managed
     WebDriver driver;
@@ -35,10 +34,10 @@ public class SearchTest {
     @Test
     public void searchFromTheMainPage() {
         mainPage.open();
-        mainPage.searchFor(SEARCH_PLACE, FROM_DATE, TO_DATE);
+        mainPage.searchFor(TEST_CITY, TestData.FROM_DATE, TestData.TO_DATE);
         List<String> locations = resultsPage.readHotelLocations();
-        locations.stream().forEach(location ->
-                assertTrue("Hotel isn't located in " + SEARCH_PLACE,
-                        location.contains(SEARCH_PLACE)));
+        locations.forEach(location ->
+                assertTrue("Hotel (" + location + ") isn't located in " + TEST_CITY,
+                        location.contains(TEST_CITY)));
     }
 }
